@@ -13,6 +13,23 @@
  * `web` is a hardcoded alias for `--profile web`; `plugin` manages a profile's
  * plugin dependencies by forwarding to pnpm.
  * @module @deepseek-ai/dsh/args
+ *
+ */
+
+/**
+ * `dsh` 命令行的 Commander 适配层。
+ *
+ * 启动器只解析自己负责的部分——启动哪个 profile、额外应用哪些 patch overlay、
+ * 以及配置 dump——并把**自己 flag 之后的全部内容**原样交给已启动的插件树。
+ * 注入的应用插件在那里解析各自的 flag 家族，并打印各自的 `--help`（见
+ * `@deepseek-ai/dsh-cmdline`）。因此启动器 flag 必须写在前面：本解析器遇到
+ * 第一个不认识的 token，后面就都算内部参数。所以
+ * `dsh --profile tui --resume abc` 会启动 tui profile 并带上 `--resume abc`；
+ * 而 `dsh --profile web -h` 打印的是 web 应用的帮助，不是本启动器的帮助。
+ *
+ * `web` 是 `--profile web` 的硬编码别名；`plugin` 通过转发给 pnpm 来管理某个
+ * profile 的插件依赖。
+ * @module @deepseek-ai/dsh/args
  */
 
 import { Command, CommanderError } from 'commander'
@@ -181,8 +198,10 @@ export function parseDshArgs(argv: readonly string[], version: string): DshInvoc
     })
 
   try {
+    // 解析命令行参数
     program.parse(argv, { from: 'user' })
   } catch (error) {
+    // 如果解析命令行参数失败，则退出程序，并返回错误码
     return process.exit(error instanceof CommanderError ? error.exitCode : 1)
   }
   /* v8 ignore next -- an action resolves or Commander throws */

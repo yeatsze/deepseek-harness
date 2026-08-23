@@ -24,6 +24,8 @@ function readVersion(): string {
   return typeof manifest.version === 'string' ? manifest.version : '0.0.0'
 }
 
+// process 是 Node.js 提供的全局对象，表示当前这个正在跑的进程。不用 import，在 Node 里直接就能用。process.argv
+// 启动命令时的参数列表，从第二个参数开始，到结尾。slice(2) 就是从第二个参数开始，到结尾。slice 方法返回一个新数组，包含从 start 到 end 的元素。
 const invocation = parseDshArgs(process.argv.slice(2), readVersion())
 
 switch (invocation.mode) {

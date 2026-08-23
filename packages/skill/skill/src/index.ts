@@ -7,6 +7,12 @@
  * from; this service only merges provider catalogs, resolves the winning skill
  * for a name, and exposes the winning summaries and definitions to consumers.
  *
+ * Agent skill 提供者注册表。
+ *
+ * 本包承担 skill 能力缝的 Service Definition 角色。具体提供者（如
+ * `@deepseek-ai/dsh-skill-filesystem`）决定 skill 从哪里来；本服务只合并各
+ * 提供者目录、解析同名 skill 的胜出者，并向消费者暴露胜出摘要与定义。
+ *
  * @module @deepseek-ai/dsh-skill
  */
 
